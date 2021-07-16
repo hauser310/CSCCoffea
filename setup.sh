@@ -1,4 +1,4 @@
-ENV_DIR=csc.env
+ENV_DIR=.venv
 
 echo "Creating virtual environment..."
 python -m venv $ENV_DIR
