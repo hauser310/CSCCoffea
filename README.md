@@ -2,10 +2,15 @@ Exploratory repository which attempts to use [coffea](https://coffeateam.github.
 
 ## Setup
 
-Starting your Coffea-based scripts with the `setup.sh` script will automatically handle the setup and (de)activation of a Coffea-ready virtual environment.
+First clone the git repository with
 
-Recommended usage:
+```bash
+git clone https://github.com/williamnash/CSCCoffea.git
+cd CSCCoffea
 ```
+Then setup the virtual environment
+
+```bash
 source setup.sh
 ```
 
