@@ -14,6 +14,17 @@ Then setup the virtual environment
 source setup.sh
 ```
 
+## Run
+
+After the setup and with an active virtual environment, one can run a script in the `src/` folder via
+
+```bash
+python template_executor.py
+```
+
+this script will produce an output histogram (png) holding information related to a sample dataset.
+
+
 ## Coffea usage
 The primary idea is that `for` loops in python are slow (due to type-checking overhead on each iteration), so using [awkward array](https://awkward-array.readthedocs.io/en/latest/) (based on numpy) affords loops that can iterate ~ 100x faster than they would otherwise.
 
@@ -42,13 +53,3 @@ Which gives
 ```bash
 [1 2]
 ```
-
-## Run
-
-After the setup and with an active virtual environment, one can run a script in the `src/` folder via
-
-```bash
-python template_executor.py
-```
-
-this script will produce an output histogram (png) holding information related to a sample dataset.
