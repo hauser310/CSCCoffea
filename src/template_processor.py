@@ -18,7 +18,7 @@ class TemplateProcessor(processor.ProcessorABC):
                 "allevents": processor.defaultdict_accumulator(float),
                 "muons": hist.Hist(
                     "Muons",  # <- things we are counting
-                    hist.Bin("pt", "$p_{T}$ [GeV]", 20, 0, 200),
+                    hist.Bin("pt", "$p_{T}$ [GeV]", 50, 0, 200),
                 ),
             }
         )
@@ -41,14 +41,14 @@ class TemplateProcessor(processor.ProcessorABC):
                 "pt": events.muon_pt,
                 "eta": events.muon_eta,
                 "phi": events.muon_phi,
-                "mass": ak.Array([0.105658375 for _ in range(len(events.patmu_px))]),
+                "mass": ak.Array([0.105658375 for _ in range(len(events.muon_pt))]),
                 "charge": events.muon_q,
             }
         )
 
-        muons = muons[muons.pt > 5]  # select muons with pT > 5
+        muons = muons[muons.pt > 10]  # select muons with pT > 10 GeV
 
-        output["muons"][dataset] += ak.sum(ak.num(muons) > 0)
+        output["muons"].fill(pt=ak.flatten(muons.pt))
 
         return output
 

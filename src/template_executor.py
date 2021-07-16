@@ -5,7 +5,7 @@ import coffea.hist as hist
 import coffea.processor as processor
 import matplotlib.pyplot as plt
 from coffea.nanoevents import BaseSchema
-from TemplateProcessor import TemplateProcessor
+from template_processor import TemplateProcessor
 
 # increase resolution of output .png files
 plt.figure(dpi=400)
@@ -31,5 +31,5 @@ out = processor.run_uproot_job(
 )
 
 fig, ax = plt.subplots()
-ax = hist.plot1d(out["muons"])
-plt.savefig("nmuons.png")
+ax = hist.plot1d(out["muons"].project("pt"))
+plt.savefig("muon_pt.png")

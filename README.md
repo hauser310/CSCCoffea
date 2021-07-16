@@ -1,9 +1,5 @@
 Exploratory repository which attempts to use [coffea](https://coffeateam.github.io/coffea/index.html) as an alternative means of processing and analyzing CSC data
 
-##
-
-
-
 ## Setup
 
 Starting your Coffea-based scripts with the `setup.sh` script will automatically handle the setup and (de)activation of a Coffea-ready virtual environment.
@@ -41,3 +37,13 @@ Which gives
 ```bash
 [1 2]
 ```
+
+## Run
+
+After the setup and with an active virtual environment, one can run a script in the `src/` folder via
+
+```bash
+python template_executor.py
+```
+
+this script will produce an output histogram (png) holding information related to a sample dataset.
