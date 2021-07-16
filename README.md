@@ -1,12 +1,12 @@
 Exploratory repository which attempts to use [coffea](https://coffeateam.github.io/coffea/index.html) as an alternative means of processing and analyzing CSC data
 
-## 
+##
 
 
 
 ## Setup
 
-Starting your Coffea-based scripts with the `coffea.sh` script will automatically handle the setup and (de)activation of a Coffea-ready virtual environment.
+Starting your Coffea-based scripts with the `setup.sh` script will automatically handle the setup and (de)activation of a Coffea-ready virtual environment.
 
 Recommended usage:
 ```
