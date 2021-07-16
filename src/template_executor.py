@@ -1,6 +1,5 @@
 """Template executor that runs the processor (in a distributed way, or otherwise)."""
 import glob
-
 import coffea.hist as hist
 import coffea.processor as processor
 import matplotlib.pyplot as plt
@@ -18,7 +17,7 @@ plt.figure(dpi=400)
 """
 Select the files to run over
 """
-files = glob.glob("/eos/home-w/wnash/public/CSCUCLA/CSCDigiTree*.root")
+files = glob.glob("/eos/cms/store/user/wnash/CSCDigiTree*.root")
 
 fileset = {"dummy": files}
 
