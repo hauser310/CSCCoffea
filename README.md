@@ -2,7 +2,7 @@ Exploratory repository which attempts to use [coffea](https://coffeateam.github.
 
 ## Setup
 
-First clone the git repository with
+On an [LXPLUS](https://information-technology.web.cern.ch/book/lxplus-service/lxplus-guide) node, first clone the git repository with
 
 ```bash
 git clone https://github.com/williamnash/CSCCoffea.git
