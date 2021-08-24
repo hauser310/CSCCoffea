@@ -19,6 +19,7 @@ class TemplateProcessor(processor.ProcessorABC):
                 "muons": hist.Hist(
                     "Muons",  # <- things we are counting
                     hist.Bin("pt", "$p_{T}$ [GeV]", 50, 0, 200),
+                    hist.Bin("eta", "$\\eta$", 50, -4, 4),
                 ),
             }
         )
@@ -48,7 +49,7 @@ class TemplateProcessor(processor.ProcessorABC):
 
         muons = muons[muons.pt > 10]  # select muons with pT > 10 GeV
 
-        output["muons"].fill(pt=ak.flatten(muons.pt))
+        output["muons"].fill(pt=ak.flatten(muons.pt), eta=ak.flatten(muons.eta))
 
         return output
 

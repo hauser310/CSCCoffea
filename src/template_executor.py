@@ -25,10 +25,16 @@ out = processor.run_uproot_job(
     fileset=fileset,
     treename="CSCDigiTree",
     processor_instance=TemplateProcessor(),
-    executor=processor.futures_executor,
+    # executor=processor.futures_executor,
+    executor=processor.iterative_executor,
     executor_args={"schema": BaseSchema, "workers": 8},
 )
 
 fig, ax = plt.subplots()
 ax = hist.plot1d(out["muons"].project("pt"))
 plt.savefig("muon_pt.png")
+
+
+fig.clear()
+ax = hist.plot2d(out["muons"].project("pt", "eta"), xaxis="pt")
+plt.savefig("muon_eta_vs_pt.png")
