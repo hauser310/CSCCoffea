@@ -9,6 +9,9 @@ from bremsstrahlung_processor import BremsstrahlungProcessor
 
 OUTPUT_DIR = "../output/"
 
+# increase resolution of output .png files
+plt.figure(dpi=400)
+
 """
 Select the files to run over, here use a generated muon gun with gen information
 """
@@ -28,6 +31,20 @@ out = processor.run_uproot_job(
 
 fig, ax = plt.subplots()
 
+
+fig.clear(True)
+ax.clear()
+p_dp = out["exit"].project("p", "dp")
+p_dp = p_dp.rebin("p", hist.Bin("p_rebinned", "$p$ [GeV]", 5, 0, 4000))
+ax = hist.plot1d(p_dp, overlay="p_rebinned", density="true")
+plt.savefig(OUTPUT_DIR + "muon_dp_vs_p_slices.pdf")
+
+ax = hist.plot2d(
+    out["exit"].project("p", "dp"), xaxis="p", patch_opts={"norm": LogNorm()}
+)
+plt.savefig(OUTPUT_DIR + "muon_dp_vs_p.pdf")
+
+
 detectors = ["ecal", "hcal"]
 
 for detector in detectors:
@@ -46,10 +63,17 @@ for detector in detectors:
     plt.savefig(OUTPUT_DIR + f"muon_{detector}_vs_p.png")
 
 
-fig.clear()
+fig.clear(True)
 ax = hist.plot2d(
     out["muons"].project("hcal", "ecal"), xaxis="hcal", patch_opts={"norm": LogNorm()}
 )
 ax.set_yscale("log")
 ax.set_xscale("log")
 plt.savefig(OUTPUT_DIR + "muon_ecal_vs_hcal.png")
+
+
+fig.clear(True)
+ax = hist.plot2d(
+    out["exit"].project("p", "p_exit"), xaxis="p", patch_opts={"norm": LogNorm()}
+)
+plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
