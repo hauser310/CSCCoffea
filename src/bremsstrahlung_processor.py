@@ -71,12 +71,17 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
         self._accumulator = processor.dict_accumulator(
             {
                 "allevents": processor.defaultdict_accumulator(float),
-                "muons": hist.Hist(
+                "all_muons": hist.Hist(
+                    "Muons",
+                    hist.Bin("p", "$p$ [GeV]", 100, -10, 4010),
+                    hist.Bin("eta", "$\\eta$", 100, 0.5, 3.0),
+                    hist.Bin("phi", "$\\phi$", 100, -3.15, 3.15),
+                ),
+                "muon_deposits": hist.Hist(
                     "Muons",
                     hist.Bin(
                         "p", "$p$ [GeV]", np.array([0, 800, 1600, 2400, 3200, 4000])
                     ),
-                    # hist.Bin("eta", "$\\eta$", 50, 0, 4),
                     hist.Bin(
                         "hcal", "HCAL energy loss [GeV]", np.logspace(-2.5, 0.5, num=51)
                     ),
@@ -134,11 +139,14 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
                 "pt": events.gen_pt,
                 "p": pt_eta_to_p(events.gen_pt, events.gen_eta),
                 "eta": events.gen_eta,
-                # "theta": 2. * np.arctan(np.exp(-events.gen_eta)),
                 "phi": events.gen_phi,
-                # "mass": ak.Array([0.105658375 for _ in range(len(events.muon_pt))]),
-                # "charge": events.gen_q,
             }
+        )
+
+        output["all_muons"].fill(
+            p=ak.flatten(gen_muons.p),
+            eta=ak.flatten(gen_muons.eta),
+            phi=ak.flatten(gen_muons.phi),
         )
 
         had_calorimeters = [
@@ -197,10 +205,9 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
         p_at_exit = ak.ArrayBuilder()
         p_at_exit = get_p_at_exit(p_at_exit, gen_muons, outer_muon_sim_hits)
 
-        output["muons"].fill(
+        output["muon_deposits"].fill(
             p=ak.flatten(gen_muons.p),
             p_exit=ak.flatten(p_at_exit),
-            # eta=ak.flatten(gen_muons.eta),
             ecal=ak.flatten(associated_ecal_energy),
             hcal=ak.flatten(associated_hcal_energy),
         )

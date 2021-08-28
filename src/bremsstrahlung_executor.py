@@ -28,8 +28,15 @@ out = processor.run_uproot_job(
     executor_args={"schema": BaseSchema, "workers": 8},
 )
 
-
 fig, ax = plt.subplots()
+
+for var in ["p", "eta", "phi"]:
+    fig.clear(True)
+    ax.clear()
+    p_dp = out["all_muons"].project(var)
+    ax = hist.plot1d(out["all_muons"].project(var))
+    ax.get_legend().remove()
+    plt.savefig(OUTPUT_DIR + f"all_muons_{var}.pdf")
 
 
 fig.clear(True)
@@ -50,14 +57,18 @@ detectors = ["ecal", "hcal"]
 for detector in detectors:
     fig.clear(True)
     ax.clear()
-    ax = hist.plot1d(out["muons"].project("p", detector), overlay="p", overflow="all")
+    ax = hist.plot1d(
+        out["muon_deposits"].project("p", detector), overlay="p", overflow="all"
+    )
     ax.set_xscale("log")
     plt.savefig(OUTPUT_DIR + f"muon_{detector}_slices.png")
 
     fig.clear(True)
     ax.clear()
     ax = hist.plot2d(
-        out["muons"].project("p", detector), xaxis="p", patch_opts={"norm": LogNorm()}
+        out["muon_deposits"].project("p", detector),
+        xaxis="p",
+        patch_opts={"norm": LogNorm()},
     )
     ax.set_yscale("log")
     plt.savefig(OUTPUT_DIR + f"muon_{detector}_vs_p.png")
@@ -65,7 +76,9 @@ for detector in detectors:
 
 fig.clear(True)
 ax = hist.plot2d(
-    out["muons"].project("hcal", "ecal"), xaxis="hcal", patch_opts={"norm": LogNorm()}
+    out["muon_deposits"].project("hcal", "ecal"),
+    xaxis="hcal",
+    patch_opts={"norm": LogNorm()},
 )
 ax.set_yscale("log")
 ax.set_xscale("log")
