@@ -1,4 +1,5 @@
 ENV_DIR=.venv
+OUT_DIR=output
 
 if [ ! -d "$ENV_DIR" ]; then
     echo "Creating virtual environment..."
@@ -12,3 +13,8 @@ if [ ! -d "$ENV_DIR" ]; then
 fi
 
 source activate $ENV_DIR
+
+if [ ! -d "$OUT_DIR" ]; then
+    echo "Making output directory..."
+    mkdir OUT_DIR
+fi
