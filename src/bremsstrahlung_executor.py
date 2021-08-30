@@ -3,6 +3,7 @@ import glob
 import coffea.hist as hist
 import coffea.processor as processor
 import matplotlib.pyplot as plt
+import pandas as pd
 from coffea.nanoevents import BaseSchema
 from matplotlib.colors import LogNorm
 from bremsstrahlung_processor import BremsstrahlungProcessor
@@ -41,13 +42,17 @@ for var in ["p", "eta", "phi"]:
 
 fig.clear(True)
 ax.clear()
-p_dp = out["exit"].project("p", "dp")
+p_dp = out["p_loss"].project("p", "dp")
 p_dp = p_dp.rebin("p", hist.Bin("p_rebinned", "$p$ [GeV]", 5, 0, 4000))
-ax = hist.plot1d(p_dp, overlay="p_rebinned", density="true")
+ax = hist.plot1d(p_dp, overlay="p_rebinned", overflow="all", density="true")
 plt.savefig(OUTPUT_DIR + "muon_dp_vs_p_slices.pdf")
 
 ax = hist.plot2d(
-    out["exit"].project("p", "dp"), xaxis="p", patch_opts={"norm": LogNorm()}
+    out["p_loss"].project("p", "dp"),
+    xaxis="p",
+    xoverflow="all",
+    yoverflow="all",
+    patch_opts={"norm": LogNorm()},
 )
 plt.savefig(OUTPUT_DIR + "muon_dp_vs_p.pdf")
 
@@ -87,6 +92,18 @@ plt.savefig(OUTPUT_DIR + "muon_ecal_vs_hcal.png")
 
 fig.clear(True)
 ax = hist.plot2d(
-    out["exit"].project("p", "p_exit"), xaxis="p", patch_opts={"norm": LogNorm()}
+    out["p_loss"].project("p", "p_exit"),
+    xaxis="p",
+    xoverflow="all",
+    yoverflow="all",
+    patch_opts={"norm": LogNorm()},
 )
 plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
+
+columns = ["p", "dp", "eta", "phi", "hcal", "ecal"]
+data = {}
+for col in columns:
+    data[col] = out[col].value
+
+df = pd.DataFrame(data)
+df.to_pickle(OUTPUT_DIR + "brem_dataset.pkl")

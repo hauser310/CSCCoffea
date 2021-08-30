@@ -94,7 +94,7 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
                         np.array([0, 800, 1600, 2400, 3200, 4000]),
                     ),
                 ),
-                "exit": hist.Hist(
+                "p_loss": hist.Hist(
                     "Muons",
                     hist.Bin(
                         "p",
@@ -118,6 +118,12 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
                         100,
                     ),
                 ),
+                "p": processor.column_accumulator(np.zeros(shape=(0,))),
+                "dp": processor.column_accumulator(np.zeros(shape=(0,))),
+                "phi": processor.column_accumulator(np.zeros(shape=(0,))),
+                "eta": processor.column_accumulator(np.zeros(shape=(0,))),
+                "hcal": processor.column_accumulator(np.zeros(shape=(0,))),
+                "ecal": processor.column_accumulator(np.zeros(shape=(0,))),
             }
         )
 
@@ -205,18 +211,47 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
         p_at_exit = ak.ArrayBuilder()
         p_at_exit = get_p_at_exit(p_at_exit, gen_muons, outer_muon_sim_hits)
 
-        output["muon_deposits"].fill(
-            p=ak.flatten(gen_muons.p),
-            p_exit=ak.flatten(p_at_exit),
-            ecal=ak.flatten(associated_ecal_energy),
-            hcal=ak.flatten(associated_hcal_energy),
+        muons = ak.zip(
+            {
+                "p": gen_muons.p,
+                "eta": gen_muons.eta,
+                "phi": gen_muons.phi,
+                "p_exit": p_at_exit,
+                "hcal": associated_hcal_energy,
+                "ecal": associated_ecal_energy,
+                "dp": gen_muons.p - p_at_exit,
+            }
         )
 
-        output["exit"].fill(
-            p=ak.flatten(gen_muons.p),
-            p_exit=ak.flatten(p_at_exit),
-            dp=ak.flatten(gen_muons.p) - ak.flatten(p_at_exit),
+        # select those that have a momentum measured in the last station
+        # with non-zero calo deposits
+
+        muons_w_deposits_st4 = muons[
+            (muons.p_exit != -1) & (muons.ecal != 0) & (muons.hcal != 0)
+        ]
+
+        output["muon_deposits"].fill(
+            p=ak.flatten(muons_w_deposits_st4.p),
+            p_exit=ak.flatten(muons_w_deposits_st4.p_exit),
+            ecal=ak.flatten(muons_w_deposits_st4.ecal),
+            hcal=ak.flatten(muons_w_deposits_st4.hcal),
         )
+
+        output["p_loss"].fill(
+            p=ak.flatten(muons_w_deposits_st4.p),
+            p_exit=ak.flatten(muons_w_deposits_st4.p_exit),
+            dp=ak.flatten(muons_w_deposits_st4.dp),
+        )
+
+        for var in ["p", "dp", "phi", "eta", "hcal", "ecal"]:
+            if var in ["ecal", "hcal"]:
+                output[var] += processor.column_accumulator(
+                    np.log10(ak.flatten(muons_w_deposits_st4[var]).to_numpy())
+                )
+            else:
+                output[var] += processor.column_accumulator(
+                    ak.flatten(muons_w_deposits_st4[var]).to_numpy()
+                )
 
         return output
 
