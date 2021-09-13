@@ -124,6 +124,7 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
                 "eta": processor.column_accumulator(np.zeros(shape=(0,))),
                 "hcal": processor.column_accumulator(np.zeros(shape=(0,))),
                 "ecal": processor.column_accumulator(np.zeros(shape=(0,))),
+                "csc": processor.column_accumulator(np.zeros(shape=(0,))),
             }
         )
 
@@ -205,6 +206,12 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
             associated_ecal_energy, gen_muons, calorimeters["ecal"]
         )
 
+        # todo, split this up by chamber / station
+        associated_csc_energy = ak.ArrayBuilder()
+        associated_csc_energy = get_associated_energy(
+            associated_csc_energy, gen_muons, csc_hits
+        )
+
         outer_muon_sim_hits = csc_hits[
             (np.abs(csc_hits.pdg_id) == 13) & (csc_hits.station == 4)
         ]
@@ -219,6 +226,7 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
                 "p_exit": p_at_exit,
                 "hcal": associated_hcal_energy,
                 "ecal": associated_ecal_energy,
+                "csc": associated_csc_energy,
                 "dp": gen_muons.p - p_at_exit,
             }
         )
@@ -243,8 +251,9 @@ class BremsstrahlungProcessor(processor.ProcessorABC):
             dp=ak.flatten(muons_w_deposits_st4.dp),
         )
 
-        for var in ["p", "dp", "phi", "eta", "hcal", "ecal"]:
-            if var in ["ecal", "hcal"]:
+        for var in ["p", "dp", "phi", "eta", "hcal", "ecal", "csc"]:
+            if var in ["ecal", "hcal", "csc"]:
+                # save logarithm of these energies
                 output[var] += processor.column_accumulator(
                     np.log10(ak.flatten(muons_w_deposits_st4[var]).to_numpy())
                 )

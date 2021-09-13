@@ -78,7 +78,6 @@ for detector in detectors:
     ax.set_yscale("log")
     plt.savefig(OUTPUT_DIR + f"muon_{detector}_vs_p.png")
 
-
 fig.clear(True)
 ax = hist.plot2d(
     out["muon_deposits"].project("hcal", "ecal"),
@@ -100,7 +99,8 @@ ax = hist.plot2d(
 )
 plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
 
-columns = ["p", "dp", "eta", "phi", "hcal", "ecal"]
+# columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
+columns = ["p", "hcal", "ecal", "csc"]
 data = {}
 for col in columns:
     data[col] = out[col].value
