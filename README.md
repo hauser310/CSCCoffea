@@ -14,6 +14,8 @@ Then setup the virtual environment
 source setup.sh
 ```
 
+After the initial installation, one must reactivate the virtual environment again before running the code
+
 ## Run
 
 After the setup and with an active virtual environment, one can run a script in the `src/` folder via
