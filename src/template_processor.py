@@ -31,6 +31,7 @@ class TemplateProcessor(processor.ProcessorABC):
                 "muons": hist.Hist(
                     "Muons",  # <- things we are counting
                     hist.Bin("pt", "$p_{T}$ [GeV]", 50, 0, 200),
+                    hist.Bin("eta", "$\\eta$", 50, -2.5, 2.5),
                     hist.Bin("mass", "$m_{\\mu}$ [GeV]", 50, 0.1, 0.11),
                     hist.Bin("charge", "$q$ [e]", 50, -10, 10),
                 ),

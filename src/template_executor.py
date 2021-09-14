@@ -27,6 +27,7 @@ fig.clear() #use only if not the first plot, otherwise delete
 ax = hist.plot1d(out["variable"].project("leaf"))
 plt.savefig("variable/variable_leaf.png")"""
 
+
 fig, ax = plt.subplots()
 ax = hist.plot1d(out["segment_slice_dxdz"], overlay="pt_slice", density=True)
 plt.savefig("segment/segment_slice_dxdz_vs_pt.png")
@@ -44,3 +45,10 @@ ax = hist.plot1d(out["segment_muon"].project("nHits"), density=True)
 plt.ylim(0, 1)
 ax.legend(["entire dataset", "muon-associated section"])
 plt.savefig("segment/segment_muon_nHits.png")
+
+ax = hist.plot1d(out["muons"].project("pt"))
+plt.savefig("muon_pt.png")
+
+fig.clear()
+ax = hist.plot2d(out["muons"].project("pt", "eta"), xaxis="pt")
+plt.savefig("muon_eta_vs_pt.png")
