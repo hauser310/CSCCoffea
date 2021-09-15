@@ -1,3 +1,9 @@
+#Project excludes
+*.png
+src/*.png
+src/segment/
+src/clct/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
