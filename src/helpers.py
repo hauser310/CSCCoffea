@@ -1,5 +1,6 @@
 """Helper functions for processing data."""
 import numpy as np
+import scipy
 
 
 def serial_to_endcap(x: int) -> int:
@@ -35,3 +36,25 @@ def eta_to_theta(eta: float) -> float:
 def pt_eta_to_p(pt: float, eta: float) -> float:
     """Convert transverse momentum and pseudorapidity to momentum."""
     return pt / np.sin(eta_to_theta(eta))
+
+
+def landau(X, mean_offset, mean_slope, scale_slope, norm):
+    """
+    Landau pdf as a function of energy loss and muon momentum.
+
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moyal.html#scipy.stats.moyal
+
+    param x: x data to fit to
+        [energy loss,
+         energy]
+    param mean_offset: offset from zero of the most probable value
+    param mean_slope: linear dependency on momentum of most probable value
+    param scale_slope: linear dependency on momentum of scale
+    param norm: normalization
+
+    return: probability of the energy loss de at a given e
+    """
+    dp, p = X
+    return norm * scipy.stats.moyal.pdf(
+        dp, loc=(mean_offset + mean_slope * p), scale=(scale_slope * p)
+    )
