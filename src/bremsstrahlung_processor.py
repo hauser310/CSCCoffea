@@ -48,6 +48,23 @@ def get_associated_energy(associated_array, gen_muons, detector_deposits):
 
 
 @numba.njit
+def get_deltar_weighted_associated_energy(
+    associated_array, gen_muons, detector_deposits
+):
+    """Find the energy deposits associated with each gen muon."""
+    for event_muons, event_deposits in zip(gen_muons, detector_deposits):
+        associated_array.begin_list()
+        for muon in event_muons:
+            associated_deposits = 0.0
+            for deposit in event_deposits:
+                # far away deposits count for more
+                associated_deposits += delta_r(muon, deposit) * deposit.energy
+            associated_array.append(associated_deposits)
+        associated_array.end_list()
+    return associated_array
+
+
+@numba.njit
 def get_p_at_exit(p_at_exit, gen_muons, sim_hits):
     """Get the muon momentum as it leaves the detector."""
     for event_muons, event_hits in zip(gen_muons, sim_hits):

@@ -100,7 +100,7 @@ ax = hist.plot2d(
 plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
 
 # columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
-columns = ["p", "hcal", "ecal", "csc"]
+columns = ["dp", "eta", "phi", "hcal", "ecal", "csc"]
 data = {}
 for col in columns:
     data[col] = out[col].value

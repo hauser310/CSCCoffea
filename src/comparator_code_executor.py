@@ -1,5 +1,4 @@
 """Executor that runs the processor analyzing pre-compiled comparator code (in a distributed way, or otherwise)."""
-import glob
 import coffea.hist as hist
 import coffea.processor as processor
 import matplotlib.pyplot as plt
@@ -13,16 +12,16 @@ plt.figure(dpi=400)
 """Select the files to run over"""
 
 df = pd.read_csv(
-    "/afs/cern.ch/user/e/ezweig/CSCUCLA/CSCPatterns/outputs/LUTBuilder_TEMPLATE.csv",
+    "/afs/cern.ch/user/w/wnash/CSCCoffea/data/comparator_codes.csv",
     header=None,
     names=["key_pattern", "key_code", "foundSegment", "entry_layers", "entry_chi2"],
 )
 
-files = glob.glob(
-    "/afs/cern.ch/user/e/ezweig/CSCUCLA/CSCPatterns/outputs/LUTBuilder_TEMPLATE.root"
-)
-
-fileset = {"dummy": [df]}
+fileset = {
+    "dummy": [
+        df,
+    ]
+}
 
 out = processor.run_uproot_job(
     fileset=fileset,
