@@ -7,8 +7,8 @@ import pandas as pd
 from coffea.nanoevents import BaseSchema
 from matplotlib.colors import LogNorm
 from bremsstrahlung_processor import BremsstrahlungProcessor
+from helpers import OUTPUT_DIR
 
-OUTPUT_DIR = "../output/"
 
 # increase resolution of output .png files
 plt.figure(dpi=400)
@@ -100,7 +100,7 @@ ax = hist.plot2d(
 plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
 
 # columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
-columns = ["dp", "eta", "phi", "hcal", "ecal", "csc"]
+columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
 data = {}
 for col in columns:
     data[col] = out[col].value

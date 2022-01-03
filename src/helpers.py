@@ -2,6 +2,8 @@
 import numpy as np
 import scipy
 
+OUTPUT_DIR = "../output/"
+
 
 def serial_to_endcap(x: int) -> int:
     """Convert serialized chamber id to endcap."""

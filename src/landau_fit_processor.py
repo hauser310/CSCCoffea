@@ -4,12 +4,11 @@ import matplotlib.pyplot as plt
 import coffea.processor as processor
 from coffea.nanoevents import BaseSchema
 from bremsstrahlung_processor import BremsstrahlungProcessor
-from helpers import landau
+from helpers import landau, OUTPUT_DIR
 from scipy.optimize import curve_fit
 import numpy as np
 import logging
-
-OUTPUT_DIR = "../output/"
+import pickle
 
 """
 Select the files to run over, here use a generated muon gun with gen information
@@ -93,14 +92,24 @@ for dp in dps:
     for p in p_axis:
         fit_y.append(landau((dp, p), *popt))
     ax.plot(p_axis, np.array(fit_y))
+
 ax.legend([f"$\\Delta p$ = {dp} GeV" for dp in dps])
 plt.xlabel("$p$ [GeV]")
 plt.ylabel("Density (A.U.)")
 for suffix in (".png", ".pdf"):
     plt.savefig(OUTPUT_DIR + "landau_fit_dp" + suffix)
 
-# Calculate -2 ln L
 
-# for p in p_axis:
-#     integral = landau((dp, p),*popt)
-#     for dp in dp_axis:
+# with open(OUTPUT_DIR + 'p_dp_histogram.pkl', 'wb') as f:
+#     # Pickle the 'data' dictionary using the highest protocol available.
+#     momentum_dict = {'p': p_axis,
+#                      'dp': dp_axis,
+#                      'hist': dp_vs_p_data,
+#                      }
+#     pickle.dump(momentum_dict, f, pickle.HIGHEST_PROTOCOL)
+
+# pickle the fit parameters for use elsewhere
+
+with open(OUTPUT_DIR + "landau_fit_parameters.pkl", "wb") as f:
+    # Pickle the 'data' dictionary using the highest protocol available.
+    pickle.dump(popt, f, pickle.HIGHEST_PROTOCOL)
