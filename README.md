@@ -1,4 +1,8 @@
-Exploratory repository which attempts to use [coffea](https://coffeateam.github.io/coffea/index.html) as an alternative means of processing and analyzing CSC data
+Exploratory repository which attempts to use [coffea](https://coffeateam.github.io/coffea/index.html) as an alternative means of processing and analyzing [Cathode Strip Chamber](https://cms.cern/detector/detecting-muons/cathode-strip-chambers) (CSC) data.
+
+The repository contains:
+- Signal-to-background analysis Cathode Local Charged Tracks (CLCTs) using [ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic) curves
+- Algorithms used to estimate muon momentum via the energy they lose along their flight path
 
 ## Setup
 
@@ -18,7 +22,7 @@ After the initial installation, one must reactivate the virtual environment agai
 
 ## Run
 
-After the setup and with an active virtual environment, one can run a script in the `src/` folder via
+Analysis is broken up into `processors`, which hold the logic which operates on each event, and `executors`, which distributes the computation and ultimately collects it. Once the setup is complete (and with an active virtual environment) one can run a script in the `src/` folder via
 
 ```bash
 python template_executor.py
@@ -28,6 +32,7 @@ this script will produce an output histogram (png) holding information related t
 
 
 ## Coffea usage
+
 The primary idea is that `for` loops in python are slow (due to type-checking overhead on each iteration), so using [awkward array](https://awkward-array.readthedocs.io/en/latest/) (based on numpy) affords loops that can iterate ~ 100x faster than they would otherwise.
 
 This is done using combinations of masking, slicing, and broadcasting, which affords a diverse selection of operations that can all be done without a single for loop. This also has the added benefit of both not having to keep track of indices when iterating through arrays, as well as code readability.

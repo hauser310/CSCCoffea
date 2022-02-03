@@ -21,12 +21,6 @@ out = processor.run_uproot_job(
     executor_args={"schema": BaseSchema, "workers": 8},
 )
 
-"""Here is where we receive output from template_processor.py to generate plots.
-fig, ax = plt.subplots() #use for first plot, otherwise delete
-fig.clear() #use only if not the first plot, otherwise delete
-ax = hist.plot1d(out["variable"].project("leaf"))
-plt.savefig("variable/variable_leaf.png")"""
-
 
 fig, ax = plt.subplots()
 ax = hist.plot1d(out["segment_slice_dxdz"], overlay="pt_slice", density=True)

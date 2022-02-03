@@ -10,7 +10,6 @@ import pandas as pd
 plt.figure(dpi=400)
 
 """Select the files to run over"""
-
 df = pd.read_csv(
     "/afs/cern.ch/user/w/wnash/CSCCoffea/data/comparator_codes.csv",
     header=None,
@@ -30,12 +29,6 @@ out = processor.run_uproot_job(
     executor=processor.iterative_executor,
     executor_args={"schema": BaseSchema, "workers": 8},
 )
-
-"""Here is where we receive output from template_processor.py to generate plots.
-fig, ax = plt.subplots() #use for first plot, otherwise delete
-fig.clear() #use only if not the first plot, otherwise delete
-ax = hist.plot1d(out["variable"].project("leaf"))
-plt.savefig("variable/variable_leaf.png")"""
 
 fig, ax = plt.subplots()
 ax = hist.plot1d(out["LUT"].project("position", "pcc"), overlay="pcc", density=True)

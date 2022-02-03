@@ -14,12 +14,6 @@ class ComparatorCodeProcessor(processor.ProcessorABC):
         dataset_axis = hist.Cat("pcc", "Pattern-Comparator Code Combination")
 
         """Initialize."""
-        """First, you need to define a multi-dimensional histogram to hold
-                the data. Follow the form.
-                "tree": hist.Hist(
-                    "Thing we're counting",
-                    hist.Bin("leaf", "$units$", #number of bins, #min value, #max value),
-                    ),"""
         self._accumulator = processor.dict_accumulator(
             {
                 "allevents": processor.defaultdict_accumulator(float),
@@ -52,18 +46,6 @@ class ComparatorCodeProcessor(processor.ProcessorABC):
 
         output["allevents"][dataset] += len(events)
 
-        """Now, you'll need to unzip the variable, this stores the data into
-        the histograms we defined earlier.
-        variable = ak.zip(
-            {
-                "leaf": location_in_root_file,
-            },
-        )"""
-        """Finally, we must assign the histograms to the output to return
-        to template_executor.py for plotting.
-        output["variable"].fill(
-            leaf=ak.flatten(variable.leaf),
-            )"""
         lut = ak.zip(
             {
                 "position": events.position,
@@ -72,6 +54,7 @@ class ComparatorCodeProcessor(processor.ProcessorABC):
                 "multiplicity": events.multiplicity,
             },
         )
+
         output["LUT"].fill(
             pcc=dataset,
             position=lut.position,

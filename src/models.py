@@ -53,12 +53,11 @@ def quantile_neural_network(normalizer, tau=0.5, hp=None):
         + dense_layers
         + [
             layers.Dense(units=1, activation="relu"),
-        ]  # enforce we get a positive number]
+        ]
     )
 
     nn_model.compile(
         optimizer=tf.optimizers.Adam(learning_rate=learning_rate),
-        # loss=lambda y, y_p: quantile_loss(y, y_p, tau=tau),
         loss=lambda y, y_p: fractional_quantile_loss(y, y_p, tau=tau),
     )
 
@@ -68,10 +67,6 @@ def quantile_neural_network(normalizer, tau=0.5, hp=None):
 def neural_network(normalizer, hp=None):
     """Get the neural network model."""
     if hp is None:
-        # activation = 'relu'
-        # units = 416
-        # depth = 3
-        # learning_rate = 1e-2
         activation = "relu"
         units = 32
         depth = 4
@@ -97,16 +92,11 @@ def neural_network(normalizer, hp=None):
         + dense_layers
         + [
             layers.Dense(units=1, activation="relu"),
-        ]  # enforce we get a positive number]
+        ]
     )
 
     nn_model.compile(
         optimizer=tf.optimizers.Adam(learning_rate=learning_rate),
-        # loss='mae')
         loss="mean_absolute_percentage_error",
     )
-    # loss=multiple_quantile_loss)
-    # loss=tfa.losses.PinballLoss())
-    # loss=landau_loss)
-
     return nn_model

@@ -100,16 +100,6 @@ for suffix in (".png", ".pdf"):
     plt.savefig(OUTPUT_DIR + "landau_fit_dp" + suffix)
 
 
-# with open(OUTPUT_DIR + 'p_dp_histogram.pkl', 'wb') as f:
-#     # Pickle the 'data' dictionary using the highest protocol available.
-#     momentum_dict = {'p': p_axis,
-#                      'dp': dp_axis,
-#                      'hist': dp_vs_p_data,
-#                      }
-#     pickle.dump(momentum_dict, f, pickle.HIGHEST_PROTOCOL)
-
-# pickle the fit parameters for use elsewhere
-
 with open(OUTPUT_DIR + "landau_fit_parameters.pkl", "wb") as f:
     # Pickle the 'data' dictionary using the highest protocol available.
     pickle.dump(popt, f, pickle.HIGHEST_PROTOCOL)

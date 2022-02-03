@@ -1,4 +1,4 @@
-"""Template executor that runs the processor (in a distributed way, or otherwise)."""
+"""Executes the bremsstrahlung data processor and outputs plots."""
 import glob
 import coffea.hist as hist
 import coffea.processor as processor
@@ -14,7 +14,8 @@ from helpers import OUTPUT_DIR
 plt.figure(dpi=400)
 
 """
-Select the files to run over, here use a generated muon gun with gen information
+Select the files to run over,
+here use a generated muon gun with gen information
 """
 files = glob.glob("/eos/cms/store/user/wnash/CSCDigiTree-PDFSet12.root")
 
@@ -99,7 +100,6 @@ ax = hist.plot2d(
 )
 plt.savefig(OUTPUT_DIR + "muon_pexit_vs_p.png")
 
-# columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
 columns = ["p", "dp", "eta", "phi", "hcal", "ecal", "csc"]
 data = {}
 for col in columns:

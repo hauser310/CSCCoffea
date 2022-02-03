@@ -12,14 +12,19 @@ class TemplateProcessor(processor.ProcessorABC):
     """Runs the analysis."""
 
     def __init__(self):
-        dataset_axis = hist.Cat("dataset", "Primary dataset")
         """Initialize."""
-        """First, you need to define a multi-dimensional histogram to hold
-                the data. Follow the form.
-                "tree": hist.Hist(
-                    "Thing we're counting",
-                    hist.Bin("leaf", "$units$", #number of bins, #min value, #max value),
-                ),"""
+        dataset_axis = hist.Cat("dataset", "Primary dataset")
+
+        """
+        First, you need to define a multi-dimensional histogram to hold
+        the data. Follow the form:
+
+            "tree": hist.Hist(
+                "Thing we're counting",
+                hist.Bin("leaf", "$units$", #number of bins, #min, #max),
+            ),
+
+        """
         self._accumulator = processor.dict_accumulator(
             {
                 "allevents": processor.defaultdict_accumulator(float),
@@ -76,13 +81,16 @@ class TemplateProcessor(processor.ProcessorABC):
 
         output["allevents"][dataset] += len(events)
 
-        """Now, you'll need to unzip the variable, this stores the data into
+        """
+        Now, you'll need to unzip the variable, this stores the data into
         the histograms we defined earlier.
+
         variable = ak.zip(
             {
                 "leaf": location_in_root_file,
             },
-        )"""
+        )
+        """
 
         muons = ak.zip(
             {
@@ -103,11 +111,15 @@ class TemplateProcessor(processor.ProcessorABC):
             },
         )
 
-        """Finally, we must assign the histograms to the output to return
+        """
+        Finally, we must assign the histograms to the output to return
         to template_executor.py for plotting.
+
         output["variable"].fill(
             leaf=ak.flatten(variable.leaf),
-            )"""
+            )
+
+        """
 
         output["segment"].fill(
             mu_id=ak.flatten(segment.mu_id),
